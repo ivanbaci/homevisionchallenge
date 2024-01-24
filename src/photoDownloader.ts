@@ -2,8 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const PROJECT_BASE_DIR = process.cwd();
-
 export const downloadPhoto = async (
   photoUrl: string,
   filename: string,
