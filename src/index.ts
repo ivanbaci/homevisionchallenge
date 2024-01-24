@@ -12,10 +12,13 @@ const main = async () => {
       process.env.PHOTO_DOWNLOAD_PATH || `${process.cwd()}/photos`;
     const downloadPromises = houses.map(house => {
       const filename: string = `${house.id}-${house.address}`;
-      return downloadPhoto(house.photoURL, filename, downloadPath).catch(
-        error =>
+      return downloadPhoto(house.photoURL, filename, downloadPath)
+        .then(() =>
+          console.log(`Photo for house ${house.id} downloaded successfully.`)
+        )
+        .catch(error =>
           console.error(`Error downloading photo for house ${house.id}:`, error)
-      );
+        );
     });
 
     await Promise.all(downloadPromises);
