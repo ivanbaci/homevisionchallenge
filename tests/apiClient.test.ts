@@ -37,4 +37,16 @@ describe('fetchHousesPage', () => {
     const houses = await fetchHouses();
     expect(houses).toEqual(mockHouses);
   });
+
+  it('should retry fetching houses on failure', async () => {
+    mockAxios
+      .onGet(`${process.env.API_URL}?page=1&per_page=10`)
+      .replyOnce(503)
+      .onGet(`${process.env.API_URL}?page=1&per_page=10`)
+      .reply(200, { houses: [] });
+
+    const houses = await fetchHouses(1, 10, 3, 1);
+    expect(houses).toEqual([]);
+    expect(mockAxios.history.get.length).toBe(2);
+  });
 });
