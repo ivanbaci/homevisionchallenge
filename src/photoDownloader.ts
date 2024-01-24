@@ -4,6 +4,7 @@ import path from 'path';
 
 export const ensureDirectoryExists = (dirPath: string) => {
   if (!fs.existsSync(dirPath)) {
+    console.log(`Creating directory ${dirPath}`);
     fs.mkdirSync(dirPath, { recursive: true });
   }
 };
