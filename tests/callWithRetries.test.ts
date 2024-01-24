@@ -13,7 +13,7 @@ describe('callWithRetries', () => {
     const mockData = 'response';
     mockAxios.onGet('url').reply(200, { mockData });
 
-    const result = await callWithRetries(() => axios.get('url'), 3, 1000);
+    const result = await callWithRetries(() => axios.get('url'), 3, 1);
     expect(result.status).toBe(200);
     expect(result.data).toMatchObject({ mockData });
     expect(mockAxios.history.get.length).toBe(1);
@@ -25,8 +25,17 @@ describe('callWithRetries', () => {
     mockAxios.onGet('url').replyOnce(503);
     mockAxios.onGet('url').replyOnce(200, mockData);
 
-    const result = await callWithRetries(() => axios.get('url'), 3, 1000);
+    const result = await callWithRetries(() => axios.get('url'), 3, 1);
     expect(result.data).toBe(mockData);
     expect(mockAxios.history.get.length).toBe(2);
+  });
+
+  it('should throw error after all retries failed', async () => {
+    mockAxios.onGet('url').reply(503);
+
+    await expect(callWithRetries(() => axios.get('url'), 3, 1)).rejects.toThrow(
+      'Call failed after all retries'
+    );
+    expect(mockAxios.history.get.length).toBe(3);
   });
 });
