@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { fetchHouses } from './apiClient';
 import { downloadPhoto } from './photoDownloader';
 import { House } from './types/house.type';
@@ -7,10 +8,13 @@ const main = async () => {
     const houses: House[] = await fetchHouses();
     console.log(`Fetched ${houses.length} houses`);
 
+    const downloadPath =
+      process.env.PHOTO_DOWNLOAD_PATH || `${process.cwd()}/photos`;
     const downloadPromises = houses.map(house => {
       const filename = `${house.id}-${house.address}`;
-      return downloadPhoto(house.photoURL, filename, 'photos').catch(error =>
-        console.error(`Error downloading photo for house ${house.id}:`, error)
+      return downloadPhoto(house.photoURL, filename, downloadPath).catch(
+        error =>
+          console.error(`Error downloading photo for house ${house.id}:`, error)
       );
     });
 
