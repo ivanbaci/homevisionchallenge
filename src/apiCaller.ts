@@ -10,13 +10,13 @@ export const callWithRetries = async <T>(
       return await call();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        const status = error.response.status;
-        const message = error.response.data?.message || 'No message';
+        const status: number = error.response.status;
+        const message: string = error.response.data?.message || 'No message';
         if (status >= 500 && status <= 599) {
           // TODO: handle other errors than server errors
           console.error(`Attempt ${attempt} - Error ${status}: ${message}`);
           if (attempt < retries) {
-            const waitTime = backoffMs * attempt;
+            const waitTime: number = backoffMs * attempt;
             console.log(`Retrying in ${waitTime}ms...`);
             await new Promise(resolve => setTimeout(resolve, waitTime));
             continue;
