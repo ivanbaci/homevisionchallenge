@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import fs from 'fs';
 import path from 'path';
 
@@ -10,12 +10,12 @@ export const downloadPhoto = async (
   downloadPath: string
 ): Promise<void> => {
   try {
-    const response = await axios.get(photoUrl, {
+    const response: AxiosResponse = await axios.get(photoUrl, {
       responseType: 'stream'
     });
 
-    let extension = path.extname(photoUrl).toLowerCase();
-    if (!extension) {
+    let extension: string = path.extname(photoUrl).toLowerCase();
+    if (!extension && response.headers['content-type']) {
       const contentType = response.headers['content-type'];
       const splittedContentType = contentType.split('/');
       if (splittedContentType.length === 2) {
@@ -23,8 +23,8 @@ export const downloadPhoto = async (
       }
     }
 
-    const fullPath = path.join(downloadPath, filename + extension);
-    const writer = fs.createWriteStream(fullPath);
+    const fullPath: string = path.join(downloadPath, filename + extension);
+    const writer: fs.WriteStream = fs.createWriteStream(fullPath);
 
     response.data.pipe(writer);
 
