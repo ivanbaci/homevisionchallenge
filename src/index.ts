@@ -8,10 +8,10 @@ const main = async () => {
     const houses: House[] = await fetchHouses();
     console.log(`Fetched ${houses.length} houses`);
 
-    const downloadPath =
+    const downloadPath: string =
       process.env.PHOTO_DOWNLOAD_PATH || `${process.cwd()}/photos`;
     const downloadPromises = houses.map(house => {
-      const filename = `${house.id}-${house.address}`;
+      const filename: string = `${house.id}-${house.address}`;
       return downloadPhoto(house.photoURL, filename, downloadPath).catch(
         error =>
           console.error(`Error downloading photo for house ${house.id}:`, error)
