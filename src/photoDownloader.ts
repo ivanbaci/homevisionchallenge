@@ -7,7 +7,7 @@ const PROJECT_BASE_DIR = process.cwd();
 export const downloadPhoto = async (
   photoUrl: string,
   filename: string,
-  downloadFolder: string
+  downloadPath: string
 ): Promise<void> => {
   try {
     const response = await axios.get(photoUrl, {
@@ -23,12 +23,8 @@ export const downloadPhoto = async (
       }
     }
 
-    const downloadPath = path.join(
-      PROJECT_BASE_DIR,
-      downloadFolder,
-      filename + extension
-    );
-    const writer = fs.createWriteStream(downloadPath);
+    const fullPath = path.join(downloadPath, filename + extension);
+    const writer = fs.createWriteStream(fullPath);
 
     response.data.pipe(writer);
 
