@@ -2,10 +2,11 @@ import axios from 'axios';
 import { House } from './types/house.type';
 import { callWithRetries } from './apiCaller';
 
-const BASE_URL: string =
-  'http://app-homevision-staging.herokuapp.com/api_project/houses';
+const BASE_URL: string | undefined = process.env.API_URL;
 
 const fetchHousesPage = async (page: number, perPage: number) => {
+  if (!BASE_URL) throw new Error('API_URL is not defined');
+
   const response = await axios.get(
     `${BASE_URL}?page=${page}&per_page=${perPage}`
   );
