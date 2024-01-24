@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { fetchHouses } from './apiClient';
-import { downloadPhoto } from './photoDownloader';
+import { downloadPhoto, ensureDirectoryExists } from './photoDownloader';
 import { House } from './types/house.type';
 
 const main = async () => {
@@ -9,7 +9,9 @@ const main = async () => {
     console.log(`Fetched ${houses.length} houses`);
 
     const downloadPath: string =
-      process.env.PHOTO_DOWNLOAD_PATH || `${process.cwd()}/photos`;
+      process.env.DOWNLOAD_PATH || `${process.cwd()}/photos`;
+    ensureDirectoryExists(downloadPath);
+
     const downloadPromises = houses.map(house => {
       const filename: string = `${house.id}-${house.address}`;
       return downloadPhoto(house.photoURL, filename, downloadPath)
