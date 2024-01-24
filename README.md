@@ -58,7 +58,6 @@ Other languages like Rust or Go could also be suitable, as they have a high perf
 
 #### TODO list
 
-- **Create photo path**: implement functionality to automatically create the directory for photos if it does not exist.
 - **Handle existing files**: add logic to check if a file with the same name already exists when downloading photos, and handle the situation appropriately (e.g., rename, skip, or overwrite).
 - **Retry photo download**: implement a retry mechanism for photo downloads in case of failures, similar to the exponential backoff used for API requests.
 - **Enhance command line interface**: extend the application to accept and process command line arguments for greater flexibility. This includes the page to fetch from the api, the number of houses to fetch in each page, the number of retries when fetching the houses and the backoffMs to wait between retries.
