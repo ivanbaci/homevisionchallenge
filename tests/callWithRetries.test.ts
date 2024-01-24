@@ -1,16 +1,32 @@
 import axios from 'axios';
+import AxiosMockAdapter from 'axios-mock-adapter';
 import { callWithRetries } from '../src/apiCaller';
 
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
-
 describe('callWithRetries', () => {
+  const mockAxios = new AxiosMockAdapter(axios);
+
+  afterEach(() => {
+    mockAxios.reset();
+  });
+
   it('should successfully return data on first try', async () => {
     const mockData = 'response';
-    mockedAxios.get.mockResolvedValueOnce({ data: mockData });
+    mockAxios.onGet('url').reply(200, { mockData });
 
     const result = await callWithRetries(() => axios.get('url'), 3, 1000);
-    expect(result).toMatchObject({ data: mockData });
-    expect(mockedAxios.get).toHaveBeenCalledTimes(1);
+    expect(result.status).toBe(200);
+    expect(result.data).toMatchObject({ mockData });
+    expect(mockAxios.history.get.length).toBe(1);
+  });
+
+  it('should retry on failure and succeed on second try', async () => {
+    const mockData = 'response';
+
+    mockAxios.onGet('url').replyOnce(503);
+    mockAxios.onGet('url').replyOnce(200, mockData);
+
+    const result = await callWithRetries(() => axios.get('url'), 3, 1000);
+    expect(result.data).toBe(mockData);
+    expect(mockAxios.history.get.length).toBe(2);
   });
 });
