@@ -2,9 +2,41 @@ import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import fs from 'fs';
 import { PassThrough } from 'stream';
-import { downloadPhoto } from '../src/photoDownloader';
+import { downloadPhoto, ensureDirectoryExists } from '../src/photoDownloader';
 
 const mockAxios = new AxiosMockAdapter(axios);
+
+describe('ensureDirectoryExists', () => {
+  jest.mock('fs');
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('should create the directory if it does not exist', () => {
+    const path = '/test/path';
+    jest.spyOn(fs, 'existsSync').mockReturnValue(false);
+    const mkdirSyncSpy = jest.spyOn(fs, 'mkdirSync').mockImplementation(() => {
+      return '';
+    });
+
+    ensureDirectoryExists(path);
+
+    expect(fs.existsSync).toHaveBeenCalledWith(path);
+    expect(fs.mkdirSync).toHaveBeenCalledWith(path, { recursive: true });
+  });
+
+  it('should not try to create the directory if it already exists', () => {
+    const path = '/test/path';
+    jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+    const mkdirSyncSpy = jest.spyOn(fs, 'mkdirSync');
+
+    ensureDirectoryExists(path);
+
+    expect(fs.existsSync).toHaveBeenCalledWith(path);
+    expect(fs.mkdirSync).not.toHaveBeenCalled();
+  });
+});
 
 describe('downloadPhoto', () => {
   beforeEach(() => {
