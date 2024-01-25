@@ -8,15 +8,11 @@
 
 ### Setup
 
-1. Create a folder for photos:
-
-- Choose or create a folder where the photos will be downloaded.
-
-2. Environment variables
+1. Environment variables
 
 - Create `.env` file in the project root directory.
-- Ensure it follows the format provided in the `.env.example` file.
-- Make sure that the folder path for downloading photos, as specified in the `.env` file, exists.
+- Ensure it follows the format provided in the `.env.example` file. DOWNLOAD_PATH is optional. It has a default option.
+- If path provided does not exists, program will create it.
 
 ### Run the project
 
