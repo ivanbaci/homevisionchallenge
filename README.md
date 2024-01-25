@@ -39,6 +39,12 @@ npm run start
 4. Execution check
    - To check if application is working correctly, the user could check the specified folder to see if photos have been downloaded. Additionally, the terminal will display some logs that describe the process.
 
+### Run tests
+
+```
+npm test
+```
+
 ### Solution
 
 #### Why Node.js
