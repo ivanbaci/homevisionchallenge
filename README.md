@@ -10,9 +10,11 @@
 
 1. Environment variables
 
-- Create `.env` file in the project root directory.
-- Ensure it follows the format provided in the `.env.example` file. DOWNLOAD_PATH is optional. It has a default option.
-- If path provided does not exists, program will create it.
+- Create a `.env` file in the project's root directory.
+- Follow the format provided in the .env.example file.
+- The DOWNLOAD_PATH variable is optional and has a default value.
+- If you provide a DOWNLOAD_PATH, ensure it's an accessible location on your computer.
+- The program will create the specified download path if it doesn't exist, provided it's an accessible location.
 
 ### Run the project
 
